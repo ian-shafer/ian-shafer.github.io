@@ -1,0 +1,24 @@
+# Dependencies
+markdown:         redcarpet
+pygments:         true
+
+# Permalinks
+permalink:        pretty
+
+# Setup
+title:            'Startup Engineering'
+tagline:          'Tagline goes here'
+description:      'Description will go here.'
+url:              ian-shafer.github.io
+
+author:
+  name:           'Ian Shafer'
+  url:            https://twitter.com/ishafe
+
+paginate:         5
+
+# Custom vars
+version:          2.0.0
+
+github:
+  repo:           https://github.com/ian-shafer/ian-shafer.github.io
