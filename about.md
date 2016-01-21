@@ -20,3 +20,12 @@ Over time, I've found several philosophies that drive how I work
 * Build up, don't whittle down
 * Choose your tools and frameworks carefully
 * It's often better to roll your own
+
+Contact
+--------------------------------------------------------------------------------
+
+Ian Shafer
+
+Email: ian@1321.org
+
+[LinkedIn](https://www.linkedin.com/in/ianshafer)
