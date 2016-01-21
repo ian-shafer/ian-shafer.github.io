@@ -7,7 +7,7 @@ title: About
   This blog focuses on small to medium size custom software development.
 </p>
 
-I am technical co-founder of two startups (Anthology and Yabbly) and a software
+I am technical co-founder of two startups ([Anthology](https://anthology.co) and Yabbly) and a software
 engineer with over a decade of experience building small to medium sized web applications.
 
 I have built my career around being able to quickly deploy complex applications that support
@@ -27,5 +27,7 @@ Contact
 Ian Shafer
 
 Email: ian@1321.org
+
+[Twitter](https://twitter.com/ishafe)
 
 [LinkedIn](https://www.linkedin.com/in/ianshafer)
