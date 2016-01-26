@@ -1,6 +1,6 @@
 ---
 layout: post
-title: [WORK IN PROGRESS] Configuration (Continued)
+title: Configuration (Continued)
 ---
 
 WARNING: This post is a WORK IN PROGRESS.
