@@ -19,10 +19,9 @@ Configuration can tell your program
 Early and Often
 --------------------------------------------------------------------------------
 
-In just about any project, configuration should be one of the first things you
-address. If you don't address this early, you will attempt to solve problems
-with methods other than configuration that will lead to sub-optimal
-functionality and code smell.
+Configuration should be one of the first things you address in a new software
+project. If you don't address this early, you will attempt to solve problems
+that could easily be solved with configuration in ways that are not optimal.
 
 A classic consequence of putting off configuration is leaving configuration in
 the code. E.g. hardcoding a database connection string. When this code is shared
@@ -127,7 +126,7 @@ likely overkill.
 
 Using a scripting language for configuration allows for dynamic and calculated
 configuration values. I have never done this, and my guess is that there aren't
-many cases where this would be a good choice. But there can be great power in
+many cases where this would be a great choice. But there can be great power in
 having a programming language available in one's configuration.
 
 When to Apply Configuration
@@ -141,7 +140,7 @@ artifacts can stand on their own i.e. they do not require any specific
 environment to be deployed into. The disadvantage is that any configuration
 change requires a new build and deployment.
 
-Built Time configuration application all but forces one to store configuration
+Built time configured application all but forces one to store configuration
 along with the code.
 
 ### Runtime
@@ -174,7 +173,9 @@ configuration in your code repository. This technique comes at a cost
 Examples of storing code in configuration are email templates and event hooks.
 Email templates can be stored as configuration and allow for updates independent
 of deployments. Event hooks could allow for system updates that quickly address
-changing requirements. Code in configuration is also a solution to handling
+changing requirements.
+
+Code in configuration is also a solution to handling
 changing or unknown inputs into your program. E.g. if you're receiving data from
 a third party that is not well defined (the data, that is), you may want to
 store the code that processes the data in configuration so it can be updated
