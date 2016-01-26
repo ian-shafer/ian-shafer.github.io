@@ -46,7 +46,7 @@ for a developer's environment. I recommend this for a few reasons
 
    * Your deployment process should take care of configuring your program in remote environments. In a developer's environment, there is no deployment, and therefore, no chance to set configuration
    * Money. Engineering talent is expensive and we don't want to waste time with needless configuration
-   * It would not be good for a program running in a dev environment to interfere with a production systems (e.g. a dev program connecting to a production database)
+   * It would not be good for a program running in a dev environment to interfere with production systems (e.g. a dev program connecting to a production database)
 
 Engineers will need the ability to modify configuration in their development
 environments. The approach to modifying configuration in development will be the
@@ -57,7 +57,7 @@ First Things
 There are two main considerations when thinking about configuration:
 
 * Where to store it
-* What format
+* In what format
 
 ### Where to Store Configuration Data
 
@@ -97,8 +97,8 @@ maintained by some dev-ops process.
 Using a database for configuration is a great way to share configuration across
 all instances of the app. This is similar to the Code Repository option in that
 configuration is easily maintained across all deployments. However, there's the
-chicken/egg problem of how does the app know what database to connect to? And
-there is no version control like the Code Repository solution gives.
+chicken/egg problem of how does the app know what database to connect to? Also,
+unlike the code repository solution, there is no version control.
 
 The big advantages with database configuration are
 
@@ -135,12 +135,12 @@ When to Apply Configuration
 ### Build Time
 
 In the technique, build artifacts are built with the configuration specified at
-build time. The main advantage with built time configuration is that the build
+build time. The main advantage with build time configuration is that the build
 artifacts can stand on their own i.e. they do not require any specific
 environment to be deployed into. The disadvantage is that any configuration
 change requires a new build and deployment.
 
-Built time configured application all but forces one to store configuration
+Build time configured application all but forces one to store configuration
 along with the code.
 
 ### Runtime
@@ -162,7 +162,7 @@ multiple configuration systems.
 Code in Configuration
 --------------------------------------------------------------------------------
 
-Storing code in configuration can give you programs a new level of power and
+Storing code in configuration can give your programs a new level of power and
 flexibility. This technique only makes sense if you are not storing
 configuration in your code repository. This technique comes at a cost
 

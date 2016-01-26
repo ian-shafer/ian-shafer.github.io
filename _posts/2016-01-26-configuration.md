@@ -65,7 +65,13 @@ if test -z "$APP_HOME"; then
   fi
 fi
 
-if test -r $APP_HOME/etc/env.sh; then
-  source $APP_HOME/etc/env.sh
+if test -r $APP_HOME/etc/env; then
+  source $APP_HOME/etc/env
 fi
 {% endhighlight %}
+
+This file's main purpose is to deal with configuration. It checks that required variables are set (or that there is a sensible default) and it loads additional configuration.
+
+Line 7 loads configuration from a `.env` file. This is default configuration (suitable for a development environment) for shell scripts. Configuration loaded in this step can be overridden by line 43 (e.g. to load production configuration values).
+
+Lines 18-40 attempt to set and/or check the `APP_HOME` environment variable. Configuration files are stored in the `$APP_HOME/etc` directory. This script has to deal with both development and deployed (e.g. qa or production) environments. In development, the expectation is that there is an `APP_HOME` environment variable set to a directory that is not part of the codebase (this way, a developer's custom configuration will not be checked in). In a deployed environment, `$APP_HOME` and `$BASEDIR` must be equal.
