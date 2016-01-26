@@ -21,7 +21,7 @@ Configuration is always kicked off from a shell script that lives in my `/bin` d
 source $(dirname $0)/../.include
 {% endhighlight %}
 
-Line `1` tells the shell to use `/bin/bash` to execute the script. Line `2` sources a `.include` in `/bin`'s parent directory. Here's `.include`:
+Line 1 tells the shell to use `/bin/bash` to execute the script. Line 2 sources `.include`. Here's `.include`:
 
 {% highlight bash linenos %}
 #!/bin/bash
