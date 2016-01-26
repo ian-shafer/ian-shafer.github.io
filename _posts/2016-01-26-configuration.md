@@ -16,7 +16,7 @@ First, here are some relevant details about the project:
 
 Configuration is always kicked off from a shell script that lives in my `/bin` directory. All of my scripts in the `/bin` directory start with the following lines:
 
-{% highlight bash linenos%}
+{% highlight bash linenos=table %}
 #!/bin/bash
 source $(dirname $0)/../.include
 {% endhighlight %}
