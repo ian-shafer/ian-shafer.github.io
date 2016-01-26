@@ -16,10 +16,10 @@ First, here are some relevant details about the project:
 
 Configuration is always kicked off from a shell script that lives in my `/bin` directory. All of my scripts in the `/bin` directory start with the following lines:
 
-```
+{% highlight bash linenos%}
 #!/bin/bash
 source $(dirname $0)/../.include
-```
+{% endhighlight %}
 
 The first line tells the shell to use `/bin/bash` to execute the script. The second line sources a `.include` in `/bin`'s parent directory. Here's `.include`:
 
