@@ -21,7 +21,7 @@ Configuration is always kicked off from a shell script that lives in my `/bin` d
 source $(dirname $0)/../.include
 {% endhighlight %}
 
-The first line tells the shell to use `/bin/bash` to execute the script. The second line sources a `.include` in `/bin`'s parent directory. Here's `.include`:
+Line `1` tells the shell to use `/bin/bash` to execute the script. Line `2` sources a `.include` in `/bin`'s parent directory. Here's `.include`:
 
 {% highlight bash linenos %}
 #!/bin/bash
@@ -43,17 +43,13 @@ fi
 
 if test -e $BASEDIR/etc/override.properties; then
   if test -n "$APP_HOME" -a "$APP_HOME" != "$BASEDIR"; then
-    warn "This script is running from: $BASEDIR"
-    warn "Your APP_HOME is set to: $APP_HOME"
-    fatal "Your APP_HOME is probably misconfigured"
+    fatal "Your APP_HOME is misconfigured"
   fi
 fi
 
 if test -n "$APP_HOME" -a "$APP_HOME" != "$BASEDIR"; then
   if test -e $BASEDIR/etc/override.properties; then
-    warn "This script is running from: $BASEDIR"
-    warn "Your APP_HOME is set to: $APP_HOME"
-    fatal "Your APP_HOME is probably misconfigured"
+    fatal "Your APP_HOME is misconfigured"
   fi
 fi
 
