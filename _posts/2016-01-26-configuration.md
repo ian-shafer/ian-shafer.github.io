@@ -83,3 +83,71 @@ In a deployed environment, `$APP_HOME` and `$BASEDIR` must be equal. I typically
 At this point, `APP_HOME` is set and we have verified that we have a configuration directory. We've also loaded environment specific shell variable overrides (line 43 in the file above).
 
 Now we can startup up our app. I won't show my complete startup script here (that can be the topic of another post) because the part that relates to configuration is actually pretty short.
+
+{% highlight bash linenos %}
+java -classpath $CP -Dapp.home=$APP_HOME $CLASSNAME "$@"
+{% endhighlight %}
+
+You can ignore the `$CP` and `$CLASSNAME` variables. The main thing here is passing `$APP_HOME` as a JVM system property using the `-D` option.
+
+The final part of configuring is handled by Spring.
+
+{% highlight bash linenos %}
+  <bean
+      class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+      p:system-properties-mode-name="SYSTEM_PROPERTIES_MODE_OVERRIDE"
+      p:ignore-unresolvable-placeholders="true"
+      p:ignore-resource-not-found="true"
+      >
+    <property name="locations">
+      <list>
+        <value>classpath:common.properties</value>
+        <value>file://${app.home}/etc/override.properties</value>
+        <value>file://${app.home}/etc/local-override.properties</value>
+      </list>
+    </property>
+  </bean>
+{% endhighlight %}
+
+You can ignore the `$CP` and `$CLASSNAME` variables. The main thing here is passing `$APP_HOME` as a JVM system property using the `-D` option.
+
+The final part of configuring is handled by Spring. This is a snippet from my "common" module:
+
+{% highlight xml linenos %}
+<bean
+    class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+    p:system-properties-mode-name="SYSTEM_PROPERTIES_MODE_OVERRIDE"
+    p:ignore-unresolvable-placeholders="true"
+    p:ignore-resource-not-found="true"
+    >
+  <property name="locations">
+    <list>
+      <value>classpath:common.properties</value>
+      <value>file://${app.home}/etc/override.properties</value>
+      <value>file://${app.home}/etc/local-override.properties</value>
+    </list>
+  </property>
+</bean>
+{% endhighlight %}
+
+Configuration values are applied in these Spring context files like this
+
+{% highlight xml linenos %}
+<bean
+    id="my-id"
+    class="my.class.Name"
+    p:property-1="${common.property-1}"
+    />
+{% endhighlight %}
+
+In the above example, `property-1` will get the configured value of `common.property-1`.
+
+The value of `common.property-1` is set in the `common.properties` file (line 9 above). It can be overridden by `override.properties` (line 10), `local-override.properties` (line 11), and finally by a system property (line 3).
+
+`common.properties` is a source controlled default configuration file (all defaults should be dev friendly). It is deployed in a jar file.
+
+`override.properties` is a deployed configuration file that is also under source control. There is one of these for each deployed environment (e.g. qa and prod). I typically store these files under `/config/{qa,prod}` in my codebase.
+
+`local-override.properties` is an optional file (technically they're all optional because of the `ignore-resource-not-found="true"`) that lives on the deployment hosts. I don't use this, but if I ever needed a way to configure a host differently than the others, this is how I would do it.
+
+Finally, I can set a system property at startup time e.g. `-Dcommon.property-1=xyz` to override all previous configuration values.
