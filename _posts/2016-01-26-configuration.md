@@ -1,20 +1,18 @@
 ---
 layout: post
-title: Configuration (Continued)
+title: Configuration, Part 2
 ---
-
-WARNING: This post is a WORK IN PROGRESS.
 
 In my [previous post](/2016/01/25/configuration/) I talked about general configuration best practices. In this post, I'll detail the specifics of how I've configured my latest project.
 
 First, here are some relevant details about the project:
 
-* It's a webapp (https://anthology.co)
+* It's a webapp [Anthology](https://anthology.co)
 * It's also a REST API for our iOS app
 * JVM/Scala
 * Spring IoC
 
-Configuration is always kicked off from a shell script that lives in my `/bin` directory. All of my scripts in the `/bin` directory start with the following lines:
+Processes are always kicked off from a shell script that lives in the `$APP_HOME/bin` directory. All of my scripts in the `$APP_HOME/bin` directory start with the following lines:
 
 {% highlight bash linenos %}
 #!/bin/bash
@@ -70,7 +68,7 @@ if test -r $APP_HOME/etc/env; then
 fi
 {% endhighlight %}
 
-This file's main purpose is to deal with configuration. It checks that required variables are set (or that there is a sensible default) and it loads additional configuration.
+This file's main purpose is to setup configuration. It checks that required variables are set (or that there is a sensible default) and it loads additional configuration.
 
 Line 7 loads configuration from a `.env` file. This is default configuration (suitable for a development environment) for shell scripts. Configuration loaded in this step can be overridden by line 43 (e.g. to load production configuration values).
 
@@ -80,38 +78,17 @@ In development, the expectation is that there is an `APP_HOME` environment varia
 
 In a deployed environment, `$APP_HOME` and `$BASEDIR` must be equal. I typically deploy to `/opt/$APP_NAME`, so this means that there must be a `/opt/$APP_NAME/etc` directory.
 
-At this point, `APP_HOME` is set and we have verified that we have a configuration directory. We've also loaded environment specific shell variable overrides (line 43 in the file above).
+After `.include` is sourced `APP_HOME` is set and we have verified that we have a configuration directory. We've also loaded environment specific shell variable overrides (line 43 in the file above).
 
 Now we can startup up our app. I won't show my complete startup script here (that can be the topic of another post) because the part that relates to configuration is actually pretty short.
 
 {% highlight bash linenos %}
-java -classpath $CP -Dapp.home=$APP_HOME $CLASSNAME "$@"
+java -classpath $CP -Dapp.home=$APP_HOME co.anthology.common.spring.Main "$@"
 {% endhighlight %}
 
-You can ignore the `$CP` and `$CLASSNAME` variables. The main thing here is passing `$APP_HOME` as a JVM system property using the `-D` option.
+You can ignore the `$CP` variable. The main thing to notice here is that `$APP_HOME` is passed to the JVM as a system property using a `-D` option.
 
-The final part of configuring is handled by Spring.
-
-{% highlight bash linenos %}
-  <bean
-      class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
-      p:system-properties-mode-name="SYSTEM_PROPERTIES_MODE_OVERRIDE"
-      p:ignore-unresolvable-placeholders="true"
-      p:ignore-resource-not-found="true"
-      >
-    <property name="locations">
-      <list>
-        <value>classpath:common.properties</value>
-        <value>file://${app.home}/etc/override.properties</value>
-        <value>file://${app.home}/etc/local-override.properties</value>
-      </list>
-    </property>
-  </bean>
-{% endhighlight %}
-
-You can ignore the `$CP` and `$CLASSNAME` variables. The main thing here is passing `$APP_HOME` as a JVM system property using the `-D` option.
-
-The final part of configuring is handled by Spring. This is a snippet from my "common" module:
+The final part of configuring is handled by Spring. Here's a snippet from a Spring context file:
 
 {% highlight xml linenos %}
 <bean
@@ -140,7 +117,7 @@ Configuration values are applied in these Spring context files like this
     />
 {% endhighlight %}
 
-In the above example, `property-1` will get the configured value of `common.property-1`.
+In the above example, `property-1` will get the configured value of `common.property-1`. (Have a look at the Spring docs for more about this.)
 
 The value of `common.property-1` is set in the `common.properties` file (line 9 above). It can be overridden by `override.properties` (line 10), `local-override.properties` (line 11), and finally by a system property (line 3).
 
@@ -151,3 +128,5 @@ The value of `common.property-1` is set in the `common.properties` file (line 9 
 `local-override.properties` is an optional file (technically they're all optional because of the `ignore-resource-not-found="true"`) that lives on the deployment hosts. I don't use this, but if I ever needed a way to configure a host differently than the others, this is how I would do it.
 
 Finally, I can set a system property at startup time e.g. `-Dcommon.property-1=xyz` to override all previous configuration values.
+
+Okay, that's a short overview of how I'm configuring my latest project. Configuration may not be the most sexy topic, but it's definitely an important piece of any project.
