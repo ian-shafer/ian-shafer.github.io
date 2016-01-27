@@ -205,5 +205,5 @@ environments. Configuration values should be applied in the following order
 Next
 --------------------------------------------------------------------------------
 
-In my next post, I'll show the details of how I've configured my latest
+In my [next post](/2016/01/26/configuration/), I'll show the details of how I've configured my latest
 application.

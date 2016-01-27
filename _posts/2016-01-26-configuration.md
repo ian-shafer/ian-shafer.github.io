@@ -80,7 +80,7 @@ In a deployed environment, `$APP_HOME` and `$BASEDIR` must be equal. I typically
 
 After `.include` is sourced `APP_HOME` is set and we have verified that we have a configuration directory. We've also loaded environment specific shell variable overrides (line 43 in the file above).
 
-Now we can startup up our app. I won't show my complete startup script here (that can be the topic of another post) because the part that relates to configuration is actually pretty short.
+Now we can start up our app. I won't show my complete startup script here (that can be the topic of another post) because the part that relates to configuration is actually pretty short.
 
 {% highlight bash linenos %}
 java -classpath $CP -Dapp.home=$APP_HOME co.anthology.common.spring.Main "$@"
