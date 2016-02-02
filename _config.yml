@@ -1,24 +1,24 @@
 # Dependencies
-markdown:         kramdown
-pygments:         true
+markdown: kramdown
+highlighter: rouge
 
 # Permalinks
-permalink:        pretty
+permalink: pretty
 
 # Setup
-title:            'Startup Engineering'
-tagline:          'Start small. Get big.'
-description:      'How to build a startup from the ground up'
-url:              ian-shafer.github.io
+title: 'Startup Engineering'
+tagline: 'Start small. Get big.'
+description: 'How to build a startup from the ground up'
+url: ian-shafer.github.io
 
 author:
-  name:           'Ian Shafer'
-  url:            https://twitter.com/ishafe
+  name: 'Ian Shafer'
+  url: https://twitter.com/ishafe
 
-paginate:         5
+paginate: 5
 
 # Custom vars
-version:          2.0.0
+version: 2.0.0
 
 github:
-  repo:           https://github.com/ian-shafer/ian-shafer.github.io
+  repo: https://github.com/ian-shafer/ian-shafer.github.io
