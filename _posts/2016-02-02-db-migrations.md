@@ -35,13 +35,13 @@ Show Me the Code
 
 First, your database must have a table like this:
 
-~~~ sql
+{% highlight sql linenos %}
 create table database_versions (
   version varchar(32) not null,
   is_active boolean not null default false,
   creation_date timestamp not null default current_timestamp
 );
-~~~
+{% endhighlight %}
 
 Logic to automatically create this table could be added to my migration script below. I have a `db-init` script that creates this table for me.
 
