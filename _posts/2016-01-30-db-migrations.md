@@ -48,11 +48,9 @@ Logic to automatically create this table could be added to my migration script b
 Now let's look at the SQL migration files. There are two requirements for these files
 
 * The schema version must be available via the file name
-* The files must be sortable by name e.g. `sort -V` or `sort -t. -k 1,1n -k 2,2n, -k 3,3n`
+* The files must be sortable by name e.g. `sort -V`, or `sort -t. -k 1,1n -k 2,2n, -k 3,3n`, or just make the names lexically ordered
 
-I use file name like `0.0.0`, `0.0.1`, `0.1.0`, etc..
-
-I target GNU/Linux and OSX for my shell scripts. OSX out of the box does not support `sort -V` so I use `sort -t. -k 1,1n -k 2,2n, -k 3,3n`.
+I use file name like `000.000`, `000.001`, `001.000`, etc. because it makes the migration shell script easier (see line n below).
 
 Now for the meat. Here's the script I use to apply the migrations:
 
@@ -76,9 +74,6 @@ for f in $(ls -1 $BASEDIR/migration/*.sql | sort); do
     add-version $filev
   fi
 done
-
-psql $PSQL_OPTS -c "grant all on all tables in schema public to $DB_USER" $DB_NAME
-psql $PSQL_OPTS -c "grant all on all sequences in schema public to $DB_USER" $DB_NAME
 {% endhighlight %}
 
 This script
@@ -86,5 +81,11 @@ This script
 * Gets the current database version (line x)
 * Iterates through the migration files (in order) and applies versions that are greater than the current version (lines x-y)
 
+This script is pretty simple. When I first wrote it, I was surprised at how short it was.
+
+This script is for a postgres  databases, but I've used similar versions for MySQL.
+
 What About Rollbacks?
 --------------------------------------------------------------------------------
+
+Like I said above, this database migration technique does not handle rollbacks. It could. All one would have to do is include a rollback SQL file for each migration file and write a script to rollback to a particular version. In my experience, I've never had a need for this. Maybe I'm just lucky, but I'd like to think that it's more that I've tested and planned properly.
