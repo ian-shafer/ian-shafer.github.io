@@ -14,14 +14,14 @@ First, here are some relevant details about the project:
 
 Processes are always kicked off from a shell script that lives in the `$APP_HOME/bin` directory. All of my scripts in the `$APP_HOME/bin` directory start with the following lines:
 
-{% highlight bash linenos %}
+~~~ bash
 #!/bin/bash
 source $(dirname $0)/../.include
-{% endhighlight %}
+~~~
 
 Line 1 tells the shell to use `/bin/bash` to execute the script. Line 2 sources `.include`. Here's `.include`:
 
-{% highlight bash linenos %}
+~~~ bash
 #!/bin/bash
 
 cd $(dirname $0)/..
@@ -66,7 +66,7 @@ fi
 if test -r $APP_HOME/etc/env; then
   source $APP_HOME/etc/env
 fi
-{% endhighlight %}
+~~~
 
 This file's main purpose is to setup configuration. It checks that required variables are set (or that there is a sensible default) and it loads additional configuration.
 
@@ -82,15 +82,15 @@ After `.include` is sourced `APP_HOME` is set and we have verified that we have 
 
 Now we can start up our app. I won't show my complete startup script here (that can be the topic of another post) because the part that relates to configuration is actually pretty short.
 
-{% highlight bash linenos %}
+~~~ bash
 java -classpath $CP -Dapp.home=$APP_HOME co.anthology.common.spring.Main "$@"
-{% endhighlight %}
+~~~
 
 You can ignore the `$CP` variable. The main thing to notice here is that `$APP_HOME` is passed to the JVM as a system property using a `-D` option.
 
 The final part of configuring is handled by Spring. Here's a snippet from a Spring context file:
 
-{% highlight xml linenos %}
+~~~ xml
 <bean
     class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
     p:system-properties-mode-name="SYSTEM_PROPERTIES_MODE_OVERRIDE"
@@ -105,17 +105,17 @@ The final part of configuring is handled by Spring. Here's a snippet from a Spri
     </list>
   </property>
 </bean>
-{% endhighlight %}
+~~~
 
 Configuration values are applied in these Spring context files like this
 
-{% highlight xml linenos %}
+~~~ xml
 <bean
     id="my-id"
     class="my.class.Name"
     p:property-1="${common.property-1}"
     />
-{% endhighlight %}
+~~~
 
 In the above example, `property-1` will get the configured value of `common.property-1`. (Have a look at the Spring docs for more about this.)
 

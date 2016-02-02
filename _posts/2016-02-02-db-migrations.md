@@ -54,7 +54,7 @@ I use file name like `000.000`, `000.001`, `001.000`, etc. because it makes the 
 
 Now for the meat. Here's the script I use to apply the migrations:
 
-{% highlight bash linenos %}
+~~~ bash
 #!/bin/bash
 set -e
 source $(dirname $0)/../.include
@@ -74,7 +74,7 @@ for f in $(ls -1 $BASEDIR/migration/*.sql | sort); do
     add-version $filev
   fi
 done
-{% endhighlight %}
+~~~
 
 This script
 
