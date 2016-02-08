@@ -93,13 +93,11 @@ This script is for a postgres  databases, but I've used similar versions for MyS
 Applying the Updates
 --------------------------------------------------------------------------------
 
-In development environments, I apply these updates manually. This means that a dev would have to see that a migration file was added and run the migration script by hand. This could be handled a little better using a check at application startup that
+In development environments, I apply these updates manually. This means that a dev would have to see that a migration file was added and run the migration script by hand. This could be handled a little better using a test at application startup time that does one of the following if the databse is not up-to-date.
 
-* fails to start
-* automatically applies the migrations
-* prints a warning
-
-if the database is not up-to-date.
+* Fails to start
+* Automatically applies the migrations
+* Prints a warning
 
 In production, I apply the migrations as part of my deploy process.
 
