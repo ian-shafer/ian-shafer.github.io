@@ -3,23 +3,23 @@ layout: post
 title: Roll Your Own Database Migrations
 ---
 
-I once worked at a startup where database migration scripts distributed via email. This is not necessarily a horrible thing -- I don't remember a time where it caused a major issue (especially when compared to the bug that charged customers 10x the purchase price). But, if you want to make your database migrations a little more formal than email, you can read on about how I do this.
+I once worked at a startup where database migration scripts distributed via email. The engineering team was very small and I don't remember a time where it caused a major issue (especially when compared to the bug that charged customers 10x the purchase price). But, if you want to make your database migrations a little more formal than email, you can read on about how I do this.
 
-By the way, there are many frameworks that manage database migrations for you. I've used some of these frameworks before and they're great. Many of the techniques that I use in my day-to-day development come from things I've seen in other pieces of software -- Ruby on Rails and Drupal are two examples. If you're using one of these frameworks and are curious about how they might work, read on.
+There are many frameworks that manage database migrations for you. I've used some of these frameworks and they're great. Many of the techniques that I use in my day-to-day development come from things I've seen in other pieces of software -- Ruby on Rails, Drupal, and Spring are a few examples. If you're using one of these frameworks and are curious about how they might work, read on.
 
 The Problem
 --------------------------------------------------------------------------------
 
 Over the life of a software project that uses a relational database, the schema will need to change. How should these schema changes be tracked and applied in all environments (dev, qa, prod, etc.)?
 
-The simple answer is that one would want to track the changes just like we track code changes in any SCMS. This gives us the ability to see what the schema was like at any given time, and it gives us the ability to replay schema updates in an isolated environmet.
+The simple answer is that one would want to track the changes just like we track code changes in any SCMS. This gives us the ability to see what the schema was at any given time, and it gives us the ability to replay schema updates in an isolated environmet.
 
 Also, we'd want the updates applied automatically, or at least with just a few keypresses.
 
 One Solution
 --------------------------------------------------------------------------------
 
-When faced with this problem about four years ago (I was building an e-commerce platform for a now defunct startup), I came up with a simple solution that has served me well since then.
+When faced with this problem about four years ago (I was building an e-commerce platform for a now defunct startup), I came up with a simple solution that has served me well since.
 
 The idea is simple:
 
@@ -35,7 +35,7 @@ There are some limitations:
 Show Me the Code
 --------------------------------------------------------------------------------
 
-First, your database must have a table like this:
+First, your database must have a table that stores the current version that looks like this:
 
 ~~~ sql
 create table database_versions (
@@ -56,6 +56,22 @@ Now let's look at the SQL migration files. There are two requirements for these 
 
 I use file name like `000.000`, `000.001`, `001.000`, etc. because it makes the migration shell script easier to code.
 
+The files in the `/sql-migrations` directory are changes to the schema, not the full schema. As an example, the first file (`000.000`) may look like this:
+
+~~~ sql
+create table users (
+  name varchar(32) not null,
+  primary key (name)
+);
+~~~
+
+The second file (`000.001`) may look like this:
+
+~~~ sql
+alter table users
+add email varchar(256) not null;
+~~~
+
 Now for the meat. Here's the script I use to apply the migrations:
 
 ~~~ bash
@@ -68,11 +84,11 @@ function add-version() {
   psql $PSQL_OPTS -c "insert into database_versions (version, is_active) values ('$1', TRUE)" $DB_NAME
 }
 
-curv=$(psql $PSQL_OPTS -Atc "select version from database_versions where is_active = true" $DB_NAME)
+current_version=$(psql $PSQL_OPTS -Atc "select version from database_versions where is_active = true" $DB_NAME)
 
-for f in $(ls -1 $BASEDIR/migration/\*.sql | sort); do
+for f in $(ls -1 $BASEDIR/migration/*.sql | sort); do
   filev=$(basename $f .sql)
-  if [[ $filev > $curv ]]; then
+  if [[ $filev > $current_version ]]; then
     psql $PSQL_OPTS -vON_ERROR_STOP= -1f $f $DB_NAME
     # No need to check return code because of the 'set -e'
     add-version $filev
@@ -87,7 +103,7 @@ This script
 
 This script is pretty simple. When I first wrote it, I was surprised at how short it was.
 
-This script is for a postgres  databases, but I've used similar versions for MySQL.
+This script is for a postgres databases, but I've used similar versions for MySQL.
 
 
 Applying the Updates
